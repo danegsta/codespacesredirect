@@ -1,8 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -13,27 +10,29 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseForwardedHeaders();
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseAuthorization();
-
-app.MapStaticAssets();
+app.MapGet("/", (HttpContext httpContext) =>
+{
+    httpContext.Response.Redirect("/goodbye");
+});
 
 app.MapGet("/hello", (HttpContext httpContext) =>
 {
-    httpContext.Response.Redirect("/Home/Index");
+    httpContext.Response.Redirect("/youdidit");
 });
 
 app.MapGet("/goodbye", (HttpContext httpContext) =>
 {
-    httpContext.Response.Redirect(httpContext.Request.Scheme + Uri.SchemeDelimiter + httpContext.Request.Host + httpContext.Request.PathBase + "/Home/Index");
+    httpContext.Response.Redirect(httpContext.Request.Scheme + Uri.SchemeDelimiter + httpContext.Request.Host + httpContext.Request.PathBase + "/youdidit");
 });
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+app.MapGet("/youdidit", () =>
+{
+    return "You did it!";
+});
 
 app.Run();
