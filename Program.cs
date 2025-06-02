@@ -10,6 +10,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+//app.UseMiddleware<RedirectMiddleware>();
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
