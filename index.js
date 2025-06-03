@@ -9,6 +9,10 @@ const server = http.createServer((req, res) => {
     res.end();
   } else if (req.url === '/hello') {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.write(req.headers['x-forwarded-for']);
+    res.write('\n');
+    res.write(req.headers['x-forwarded-host']);
+    res.write('\n');
     res.end('hello world');
   } else if (req.url === '/good') {
     // Redirect to relative path
